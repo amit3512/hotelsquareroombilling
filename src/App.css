@@ -25,14 +25,14 @@ h1 {
 }
 .App {
   margin: 0 auto;
-  max-width: 1280px;
-  width: 90%;
+  max-width: 100%;
+  width: 100%;
   background: var(--mainWhite);
   padding-bottom: 2rem;
   border-radius: 2px;
 }
 
-.App h2{
+.App h2,h4{
   text-align: center;
   letter-spacing: 5px;
   
@@ -115,7 +115,7 @@ label {
   margin-bottom: 1rem;
   border: 1px solid #e0e0e0;
   display: flex;
-  justify-content: space-between;
+  justify-content:space-between;
   transition: all 0.3s linear;
 }
 .item:hover {
@@ -124,7 +124,7 @@ label {
 }
 .info {
   flex: 0 0 60%;
-  display: flex;
+  display: block;
   justify-content: space-between;
 }
 .expense {
@@ -200,3 +200,19 @@ label {
     flex: 0 0 50%;
   }
 }
+
+.print{
+    margin-top:10px ;
+    margin-left:267px ;
+    background-color: lightgreen;
+  }
+
+@media print{
+  .hide-on-print{
+    display: none;
+
+  }
+}
+
+  
+

@@ -25,7 +25,7 @@ const ExpenseList = ({expenses,clearItems,handleEdit,handleDelete}) => {
         })}
 
         {expenses.length > 0 && (
-        <button className="btn" onClick={clearItems}>
+        <button className="btn hide-on-print" onClick={clearItems}>
           <MdDelete className="btn-icon" />
           clear expenses
         </button>

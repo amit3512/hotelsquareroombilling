@@ -6,6 +6,8 @@ import Alert from "./Components/Alert";
 import './App.css';
 import { uuid } from 'uuidv4';
 
+
+
 // const initialExpenses = [
 //   { id: uuid(), charge: "rent", amount: 1600 },
 //   { id: uuid(), charge: "car payment", amount: 400 },
@@ -26,6 +28,8 @@ function App() {
   const [expenses, setExpenses] = useState(initialExpenses);
   // single expense
   const [charge, setCharge] = useState("");
+
+  const [plate, setPlate] = useState("");
   // single amount
   const [amount, setAmount] = useState("");
   // alert
@@ -45,6 +49,10 @@ function App() {
   const handleCharge = e => {
     setCharge(e.target.value);
   };
+
+  const handlePlate = e => {
+    setPlate(e.target.value);
+  };
   // add amount
   const handleAmount = e => {
     setAmount(e.target.value);
@@ -54,7 +62,7 @@ function App() {
     setAlert({ show: true, type, text });
     setTimeout(() => {
       setAlert({ show: false });
-    }, 7000);
+    }, 1500);
   };
 
   const handleSubmit = e => {
@@ -62,18 +70,20 @@ function App() {
     if (charge !== "" && amount > 0) {
       if (edit) {
         let tempExpenses = expenses.map(item => {
-          return item.id === id ? { ...item, charge, amount } : item;
+          return item.id === id ? { ...item, charge, plate, amount } : item;
         });
         setExpenses(tempExpenses);
         handleAlert({ type: "success", text: "item edited" });
         setEdit(false);
       } else {
-        const singleExpense = { id: uuid(), charge, amount };
+
+        const singleExpense = { id: uuid(), charge, plate,  amount };
         setExpenses([...expenses, singleExpense]);
         handleAlert({ type: "success", text: "item added" });
       }
       // set charge back to empty string
       setCharge("");
+      setPlate("");
       // set amount back to zero
       setAmount("");
     } else {
@@ -83,6 +93,8 @@ function App() {
       });
     }
   };
+
+  
 
   const clearItems = () =>{
     setExpenses([]);
@@ -96,38 +108,63 @@ function App() {
 
   const handleEdit = (id) => {
     let expense = expenses.find(item => item.id === id);
-    let { charge, amount } = expense;
+    let { charge, plate, amount } = expense;
     setCharge(charge);
+    setCharge(plate);
     setAmount(amount);
     setEdit(true);
     setId(id);
     handleAlert({ type: "danger", text: "item edited" });
   };
+
+  const printReceipt = () =>{
+    window.print();
+  }
     
   return (
-    <div className="App">
-    
-      <h2>Hotel Square </h2>
-      <p>Buspark,9812778378</p>
-
-       {alert.show && <Alert type={alert.type} text={alert.text} />}
-      <ExpenseForm
-          handleSubmit={handleSubmit}
-          charge={charge}
-          handleCharge={handleCharge}
-          amount={amount}
-          handleAmount={handleAmount}
-          edit={edit}
-        />
-      <ExpenseList 
-      expenses={expenses} 
-      clearItems={clearItems} 
-      handleDelete={handleDelete} 
-      handleEdit={handleEdit}
-      />
-      <h1>total spending:{""}<span>Rs.{expenses.reduce((acc,curr)=>{return (acc +=parseInt(curr.amount))},0)}</span></h1>
+  <div className="App">
       
-    </div>
+      
+   
+    
+      <div className="container">
+              <div className="row">
+                <div className="col-md-4">
+                  <div className="hide-on-print">
+                  <h2>Hotel Square </h2>
+                  <p>Buspark,9812778378</p>
+
+                  {alert.show && <Alert type={alert.type} text={alert.text} />}
+                      <ExpenseForm
+                          handleSubmit={handleSubmit}
+                          charge={charge}
+                          handleCharge={handleCharge}
+                          plate={plate}
+                          handlePlate={handlePlate}
+                          amount={amount}
+                          handleAmount={handleAmount}
+                          edit={edit}
+                        />
+                    </div>
+                </div>
+               
+                  <div className="col-md-8 show-on-print">
+                                <h2>Hotel Square </h2>
+                                <p>Buspark,9812778378</p>
+                                <ExpenseList 
+                                expenses={expenses} 
+                                clearItems={clearItems} 
+                                handleDelete={handleDelete} 
+                                handleEdit={handleEdit}
+                                />
+                          <h4 className="mt-5">Total :{""}<span className="ml-4">Rs.{expenses.reduce((acc,curr)=>{return (acc +=parseInt(curr.amount*curr.plate))},0)}</span></h4>
+                          <button className="hide-on-print print btn" onClick={printReceipt}>Print</button>
+                  </div>
+                
+              </div>
+      </div>
+</div>
+    
   );
 }
 
